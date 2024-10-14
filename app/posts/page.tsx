@@ -1,37 +1,44 @@
+import gpuData from "../../public/data/Kartu Grafis Jason.json"; // Sesuaikan dengan path JSON
 import CardList from "../components/Posts/CardList";
 import ViewUserButton from "../components/Posts/ViewUserButton";
 
-const base_url = "https://jsonplaceholder.typicode.com/posts"
-
-interface Iposts {
-  userId: number,
-  id: number,
-  title: string,
-  body: string
+interface IGPU {
+  IdGPU: number;
+  Nama: string;
+  Chipset: string;
+  Core: number;
+  TMU: number;
+  ROFS: number;
+  VRAM: number;
+  MemoryType: string;
+  BusWidth: number;
+  Vendor: string;
+  GPU: string;
+  Foundry: string;
+  TDP: number;
 }
 
-const Posts = async () => {
-  const response = await fetch(base_url, {
-    next: { revalidate: 3600 },
-  });
-  const posts: Iposts[] = await response.json()
+const GPUList = () => {
+  const gpus: IGPU[] = gpuData["Kartu Grafis"]; // Menggunakan notasi bracket
+
   return (
     <>
-    <p>{new Date().toLocaleTimeString()}</p>
+      <p>{new Date().toLocaleTimeString()}</p>
       <h1 className="text-fuchsia-500">POSTINGAN PAGE</h1>
-      {posts.map((post) => {
-        return (
-          <CardList key={post.id}>
-            <p>{post.id}</p>
-            <i>{post.title}</i>
-            <p>{post.body}</p>
-            <ViewUserButton userId={post.userId}/>
-          </CardList>
-        )
-
-      })}
+      {gpus.map((gpu) => (
+        <CardList key={gpu.IdGPU}>
+          <p>{gpu.Nama}</p>
+          <i>Chipset dan Foundry : {gpu.Chipset} & {gpu.Foundry}</i>
+          <p>Vendor : {gpu.Vendor}</p>
+          <p></p>
+          <p>VRAM: {gpu.VRAM === "0" ? "System Shared" : `${(parseInt(gpu.VRAM) / 1024)} GB`} {gpu.MemoryType}</p>
+          <p>Bus Width: {gpu.BusWidth === "0" ? "Tergantung Channel RAM" : `${gpu.BusWidth} bit`} </p>
+          <p>TDP : {gpu.TDP} W</p>
+          <ViewUserButton userId={gpu.TDP} />
+        </CardList>
+      ))}
     </>
   );
 };
 
-export default Posts
+export default GPUList;

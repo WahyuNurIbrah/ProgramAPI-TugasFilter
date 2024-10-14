@@ -5,11 +5,17 @@ interface ViewUserButtonProps {
 }
 
 const ViewUserButton: React.FC<ViewUserButtonProps> = ({ userId }) => {
-  const handleClick = () => alert(`user id: ${userId}`);
+  const handleClick = () => {
+    if (userId > 100) {
+      alert('GPU ini sahabat PLN!');
+    } else {
+      alert('GPU ini musuh PLN.');
+    }
+  };
   
   return (
     <>
-      <button onClick={handleClick}>Lihat User</button>
+      <button onClick={handleClick}>Apakah sahabat PLN? Klik disini</button>
     </>
   );
 };
